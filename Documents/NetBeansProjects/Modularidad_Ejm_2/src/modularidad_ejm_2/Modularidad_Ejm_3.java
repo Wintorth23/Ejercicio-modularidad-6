@@ -16,36 +16,40 @@ public class Modularidad_Ejm_3 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        Scanner sc = new Scanner(System.in);
+         Scanner sc = new Scanner(System.in);
+        
+        // Instanciamos nuestro servicio de lógica
+        CalculoNomina servicio = new CalculoNomina();
 
-        System.out.print("Ingrese el nombre del empleado: ");
+        System.out.print("Nombre del empleado: ");
         String nombre = sc.nextLine();
 
-        System.out.print("Ingrese la cantidad de sueldos: ");
+        System.out.print("Cantidad de sueldos: ");
         int n = sc.nextInt();
-
         double[] sueldos = new double[n];
 
         for (int i = 0; i < n; i++) {
-            System.out.print("Ingrese el sueldo " + (i + 1) + ": ");
+            System.out.print("Sueldo " + (i + 1) + ": ");
             sueldos[i] = sc.nextDouble();
         }
 
         Empleado emp = new Empleado(nombre, sueldos);
 
-        double promedio = CalculoNomina.calcularPromedio(emp.sueldos);
-        boolean aceptable = CalculoNomina.sueldoAceptable(promedio);
+        // Usamos el servicio para calcular
+        double promedio = servicio.calcularPromedio(emp.sueldos);
+        boolean aceptable = servicio.esSueldoAceptable(promedio);
 
-        System.out.print("¿Desea aplicar bono? (1=Sí / 0=No): ");
+        System.out.print("¿Desea aplicar bono? (1-Si / 0-No): ");
         int op = sc.nextInt();
 
         if (op == 1) {
-            promedio = CalculoNomina.aplicarBono(promedio);
+            // AQUI ESTÁ LA MAGIA DE SOLID:
+            // Le pasamos la estrategia específica (BonoFijo).
+            // Si mañana quieres un bono porcentual, solo cambias "new BonoFijo()" por "new BonoPorcentaje()"
+            promedio = servicio.procesarBono(promedio, new BonoFijo());
         }
 
         ReporteNomina.mostrar(emp, promedio, aceptable);
-
         sc.close();
     }
-    
 }

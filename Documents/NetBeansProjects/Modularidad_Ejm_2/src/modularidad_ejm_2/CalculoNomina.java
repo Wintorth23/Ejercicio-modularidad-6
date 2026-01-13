@@ -10,20 +10,20 @@ package modularidad_ejm_2;
  * @author jepeh
  */
 public class CalculoNomina {
-      public static double calcularPromedio(double[] sueldos) {
+       public double calcularPromedio(double[] sueldos) {
         double suma = 0;
-        for (int i = 0; i < sueldos.length; i++) {
-            suma = suma + sueldos[i];
+        for (double sueldo : sueldos) {
+            suma += sueldo;
         }
-        return suma / sueldos.length;
+        return (sueldos.length > 0) ? suma / sueldos.length : 0;
     }
 
-    public static boolean sueldoAceptable(double promedio) {
+    public boolean esSueldoAceptable(double promedio) {
         return promedio >= 500;
     }
 
-    // Paso por valor
-    public static double aplicarBono(double promedio) {
-        return promedio + 50;
+    // AHORA: Recibe la estrategia, no calcula el bono "a la fuerza"
+    public double procesarBono(double promedio, EstrategiaBono bono) {
+        return bono.aplicar(promedio);
     }
 }
